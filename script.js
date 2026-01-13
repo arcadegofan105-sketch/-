@@ -418,10 +418,10 @@ function initCrashCanvas() {
 }
 
 function generateCrashPoint() {
-	const rand = Math.random() * 100
-	if (rand < 99) return 1.01 + Math.random() * 0.4
-	if (rand < 99.9) return 1.41 + Math.random() * 1.59
-	return 3.0 + Math.random() * 7.0
+  // Система шансов: 80% на 10-100x, 20% на 100-1000x
+  const rand = Math.random() * 100
+  if (rand < 80) return 10 + Math.random() * 90
+  return 100 + Math.random() * 900
 }
 
 function drawCrashGraph() {
@@ -602,3 +602,4 @@ window.addEventListener('resize', () => {
 		alert('Ошибка авторизации/сервера: ' + (err.message || 'unknown'))
 	}
 })()
+
