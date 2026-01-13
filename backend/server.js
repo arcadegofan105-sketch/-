@@ -483,12 +483,13 @@ app.post("/api/crash/cashout", auth, (req, res) => {
 });
 
 // fallback: любые не-API роуты -> index.html
-app.get("*", (req, res) => {
+app.use (req, res) => {
   if (req.path.startsWith("/api")) return res.status(404).json({ error: "Not Found" });
   res.sendFile(INDEX_PATH);
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => console.log("✅ Listening on", PORT));
+
 
 
