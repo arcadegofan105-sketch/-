@@ -266,7 +266,7 @@ async function apiPost(path, body = {}) {
 	const res = await fetch(`${API_URL}${path}`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ initData: INIT_DATA, ...body }),
+		body: JSON.stringify(body),
 	})
 
 	const data = await res.json().catch(() => ({}))
@@ -801,4 +801,5 @@ window.addEventListener('resize', () => {
 		alert('Ошибка авторизации/сервера: ' + (err.message || 'unknown'))
 	}
 })()
+
 
