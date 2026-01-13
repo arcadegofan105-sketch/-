@@ -201,15 +201,33 @@ app.post("/api/me", auth, (req, res) => {
   res.json({ balance: u.balance, inventory: u.inventory });
 });
 
-// /api/spin не трогаем: всегда мишка
+  // /api/spin - система шансов: 80% для 10-100х, 20% для 100-1000х
 app.post("/api/spin", auth, (req, res) => {
   const id = String(req.tgUser.id);
   const u = getOrCreateUser(id);
 
   if (u.balance < 1) return res.status(400).json({ error: "Недостаточно средств" });
   u.balance = Number((u.balance - 1).toFixed(2));
-
-  res.json({ prize: { emoji: "🧸", name: "Мишка", price: 0.1 }, newBalance: u.balance });
+  
+  // Система шансов: 80% = 10-100x, 20% = 100-1000x
+  const rand = Math.random();
+  let multiplier;
+  
+  if (rand < 0.8) {
+    // 80% шанс на 10-100x
+    multiplier = 10 + Math.random() * 90;
+  } else {
+    // 20% шанс на 100-1000x
+    multiplier = 100 + Math.random() * 900;
+  }
+  
+  const prize = {
+    emoji: "🧸",
+    name: `Приз x${multiplier.toFixed(0)}`,
+    price: Number((multiplier * 0.01).toFixed(2))
+  };
+  
+  res.json({ prize, newBalance: u.balance });
 });
 
 // ===== Promo apply =====
@@ -472,4 +490,5 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => console.log("✅ Listening on", PORT));
+
 
